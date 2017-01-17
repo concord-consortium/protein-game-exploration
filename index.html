@@ -1,8 +1,32 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <style>
+#app {
+  display: flex;
+}
+#game {
+  border: 1px solid #777;
+  border-radius: 10px;
+}
+#controls {
+  padding-left: 20px;
+}
+        </style>
     </head>
     <body>
-        <script type="text/javascript" src="dist/app.js" charset="utf-8"></script>
+      <div id="app">
+        <svg id="game" width="800px" height="600px"></svg>
+        <div id="controls">
+          <div>
+              <input type="radio" name="melanogenesis" id="WORKING_TYR1" checked="checked" />
+              <label for="WORKING_TYR1">Tyr1 Working</label>
+              <br />
+              <input type="radio" name="melanogenesis" id="BROKEN_TYR1" />
+              <label for="BROKEN_TYR1">Tyr1 Broken</label>
+          </div>
+        </div>
+      </div>
+      <script type="text/javascript" src="dist/app.js" charset="utf-8"></script>
     </body>
 </html>
