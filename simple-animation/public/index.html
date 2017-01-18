@@ -18,9 +18,18 @@
   margin-bottom: 20px;
 }
 #drake {
+  position: relative;
   margin-top: 60px;
   border: 1px solid #888;
   border-radius: 8px;
+  width: 200px;
+  height: 200px;
+}
+#drake img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
 }
 .hidden {
   display: none;
@@ -54,7 +63,7 @@
               <label for="GATE_BROKEN">Gate Proteins Broken</label>
           </div>
           <div id="drake">
-            <img src="https://geniverse-resources.concord.org/resources/drakes/images/ch_m_wing_allLimb_a5_short_horn_noRostral_healthy.png" id="working_tyr1_transport_working_gate_working" />
+            <img src="https://geniverse-resources.concord.org/resources/drakes/images/ch_m_wing_allLimb_a5_short_horn_noRostral_healthy.png" id="working_tyr1_transport_working_gate_working" style="opacity: 1"/>
             <img src="https://geniverse-resources.concord.org/resources/drakes/images/st_m_wing_allLimb_a5_short_horn_noRostral_healthy.png" id="working_tyr1_transport_working_gate_broken" class="hidden"/>
             <img src="https://geniverse-resources.concord.org/resources/drakes/images/du_m_wing_allLimb_a5_short_horn_noRostral_healthy.png" id="working_tyr1_transport_broken_gate_working" class="hidden"/>
             <img src="https://geniverse-resources.concord.org/resources/drakes/images/ar_m_wing_allLimb_a5_short_horn_noRostral_healthy.png" id="working_tyr1_transport_broken_gate_broken" class="hidden"/>
