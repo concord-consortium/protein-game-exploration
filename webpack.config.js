@@ -32,6 +32,7 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin([
+      {from: path.join(__dirname, 'public')},
       {from: path.join(__dirname, 'simple-animation', 'public'), to: 'simple-animation'}
     ])
   ]
