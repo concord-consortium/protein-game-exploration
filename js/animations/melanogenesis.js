@@ -22,7 +22,7 @@ export default class Melanogenesis {
     const loop = () => {
       if (!this.isRunning) return;
 
-      let nextStepInterval = Math.random() * 1000;
+      let nextStepInterval = Math.random() * 600;
       setTimeout(loop, nextStepInterval);
 
       let x = 100 + Math.random() * 100,

@@ -172,7 +172,7 @@
 	      var loop = function loop() {
 	        if (!_this.isRunning) return;
 
-	        var nextStepInterval = Math.random() * 1000;
+	        var nextStepInterval = Math.random() * 600;
 	        setTimeout(loop, nextStepInterval);
 
 	        var x = 100 + Math.random() * 100,
@@ -8563,7 +8563,7 @@
 	      if (top > 250 && top < 340 && left > 350 && left < 410) {
 	        var path = Gate.paths[Math.floor(Math.random() * 2)];
 	        this.moveAlongPath(melanosome, path, 0);
-	        fadeTime = 10000 + Math.random() * 3000;
+	        fadeTime = 11000 + Math.random() * 3000;
 	      } else {
 	        fadeTime = 5000 + Math.random() * 3000;
 	      }
@@ -8583,7 +8583,7 @@
 	Gate.GATE_WORKING = "gate_working";
 	Gate.GATE_BROKEN = "gate_broken";
 
-	Gate.paths = [[{ x: 610, y: 200 }, { x: 680, y: 160, scatterX: 40, scatterY: 50 }], [{ x: 570, y: 450 }, { x: 630, y: 500, scatterX: 40, scatterY: 50 }]];
+	Gate.paths = [[{ x: 610, y: 185 }, { x: 680, y: 140, scatterX: 40, scatterY: 50 }], [{ x: 570, y: 450 }, { x: 630, y: 500, scatterX: 40, scatterY: 50 }]];
 
 /***/ }
 /******/ ]);
