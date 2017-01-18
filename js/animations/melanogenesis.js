@@ -8,6 +8,10 @@ export default class Melanogenesis {
     this.version = version;
   }
 
+  setListener(listener) {
+    this.listener = listener;
+  }
+
   stop() {
     this.isRunning = false;
   }
@@ -22,7 +26,7 @@ export default class Melanogenesis {
       setTimeout(loop, nextStepInterval);
 
       let x = 100 + Math.random() * 100,
-          y = 100 + Math.random() * 300,
+          y = 200 + Math.random() * 200,
           melanosome = this.snap.circle(x, y, 0);
 
       melanosome.attr({
@@ -31,9 +35,13 @@ export default class Melanogenesis {
           strokeWidth: 1
       });
 
+      let callback = () => { if (this.listener) this.listener.melanosomeCreated(melanosome) }
+
       melanosome.animate({r: 5}, 1500, () => {
         if (this.version == Melanogenesis.WORKING_TYR1) {
-          melanosome.animate({r: 9, fill: "#505050"}, 2000);
+          melanosome.animate({r: 9, fill: "#505050"}, 2000, callback);
+        } else {
+          callback();
         }
       });
     }

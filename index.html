@@ -9,8 +9,9 @@
   border: 1px solid #777;
   border-radius: 10px;
 }
-#controls {
+#controls div {
   padding-left: 20px;
+  padding-bottom: 20px;
 }
         </style>
     </head>
@@ -24,6 +25,20 @@
               <br />
               <input type="radio" name="melanogenesis" id="BROKEN_TYR1" />
               <label for="BROKEN_TYR1">Tyr1 Broken</label>
+          </div>
+          <div>
+              <input type="radio" name="transport" id="TRANSPORT_WORKING" checked="checked" />
+              <label for="TRANSPORT_WORKING">Motor Proteins Working</label>
+              <br />
+              <input type="radio" name="transport" id="TRANSPORT_BROKEN" />
+              <label for="TRANSPORT_BROKEN">Motor Proteins Broken</label>
+          </div>
+          <div>
+              <input type="radio" name="gate" id="GATE_WORKING" checked="checked" />
+              <label for="GATE_WORKING">Gate Proteins Working</label>
+              <br />
+              <input type="radio" name="gate" id="GATE_BROKEN" />
+              <label for="GATE_BROKEN">Gate Proteins Broken</label>
           </div>
         </div>
       </div>
