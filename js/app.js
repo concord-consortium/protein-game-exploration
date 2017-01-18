@@ -12,6 +12,22 @@ const melanogenesis = new Melanogenesis(snap),
 melanogenesis.run();
 
 
+let drakes = document.querySelectorAll("#drake img"),
+    hide = (els) => {
+      Array.prototype.forEach.call(els, function (el) {
+        if (el.classList)
+          el.classList.add("hidden");
+        else
+          el.className += " hidden";
+      });
+    },
+    show = (el) => {
+      if (el.classList)
+        el.classList.remove("hidden");
+      else
+        el.className = el.className.replace(new RegExp('(^|\\b)' + "hidden".split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+    }
+
 var radios = document.getElementsByTagName("input");
   for(let radio of radios) {
     radio.onchange = function() {
@@ -23,6 +39,10 @@ var radios = document.getElementsByTagName("input");
         } else if (radio.name == "gate") {
           gate.setVersion(Gate[radio.id]);
         }
+        hide(drakes);
+        let drakeId = melanogenesis.version+"_"+transport.version+"_"+gate.version,
+            drake = document.getElementById(drakeId);
+        show(drake);
       }
     }
 }

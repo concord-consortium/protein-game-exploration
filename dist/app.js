@@ -71,6 +71,16 @@
 
 	melanogenesis.run();
 
+	var drakes = document.querySelectorAll("#drake img"),
+	    hide = function hide(els) {
+	  Array.prototype.forEach.call(els, function (el) {
+	    if (el.classList) el.classList.add("hidden");else el.className += " hidden";
+	  });
+	},
+	    show = function show(el) {
+	  if (el.classList) el.classList.remove("hidden");else el.className = el.className.replace(new RegExp('(^|\\b)' + "hidden".split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+	};
+
 	var radios = document.getElementsByTagName("input");
 	var _iteratorNormalCompletion = true;
 	var _didIteratorError = false;
@@ -89,6 +99,10 @@
 	        } else if (radio.name == "gate") {
 	          gate.setVersion(_gate2.default[radio.id]);
 	        }
+	        hide(drakes);
+	        var drakeId = melanogenesis.version + "_" + transport.version + "_" + gate.version,
+	            drake = document.getElementById(drakeId);
+	        show(drake);
 	      }
 	    };
 	  };
@@ -194,8 +208,8 @@
 	exports.default = Melanogenesis;
 
 
-	Melanogenesis.WORKING_TYR1 = "working_tyr";
-	Melanogenesis.BROKEN_TYR1 = "broken_tyr";
+	Melanogenesis.WORKING_TYR1 = "working_tyr1";
+	Melanogenesis.BROKEN_TYR1 = "broken_tyr1";
 
 /***/ },
 /* 2 */
@@ -8466,8 +8480,8 @@
 	exports.default = Transport;
 
 
-	Transport.TRANSPORT_WORKING = "working";
-	Transport.TRANSPORT_BROKEN = "broken";
+	Transport.TRANSPORT_WORKING = "transport_working";
+	Transport.TRANSPORT_BROKEN = "transport_broken";
 
 	Transport.paths = [[{ x: 50, y: 50 }, { x: 30, y: 0, scatterX: 10, scatterY: 50 }], [{ x: 260, y: 270 }, { x: 320, y: 300 }, { x: 360, y: 300, scatterX: 50, scatterY: 140 }], [{ x: 70, y: 450 }, { x: 50, y: 600, scatterX: 10, scatterY: 50 }]];
 
@@ -8566,8 +8580,8 @@
 	exports.default = Gate;
 
 
-	Gate.GATE_WORKING = "working";
-	Gate.GATE_BROKEN = "broken";
+	Gate.GATE_WORKING = "gate_working";
+	Gate.GATE_BROKEN = "gate_broken";
 
 	Gate.paths = [[{ x: 610, y: 200 }, { x: 680, y: 160, scatterX: 40, scatterY: 50 }], [{ x: 570, y: 450 }, { x: 630, y: 500, scatterX: 40, scatterY: 50 }]];
 

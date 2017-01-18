@@ -69,8 +69,8 @@ export default class Gate {
   }
 }
 
-Gate.GATE_WORKING = "working";
-Gate.GATE_BROKEN = "broken";
+Gate.GATE_WORKING = "gate_working";
+Gate.GATE_BROKEN = "gate_broken";
 
 Gate.paths = [
   [{x: 610, y: 200}, {x: 680, y: 160, scatterX: 40, scatterY: 50 }],
