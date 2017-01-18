@@ -50,5 +50,5 @@ export default class Melanogenesis {
   }
 }
 
-Melanogenesis.WORKING_TYR1 = "working_tyr";
-Melanogenesis.BROKEN_TYR1 = "broken_tyr";
+Melanogenesis.WORKING_TYR1 = "working_tyr1";
+Melanogenesis.BROKEN_TYR1 = "broken_tyr1";

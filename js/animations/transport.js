@@ -54,8 +54,8 @@ export default class Transport {
   }
 }
 
-Transport.TRANSPORT_WORKING = "working";
-Transport.TRANSPORT_BROKEN = "broken";
+Transport.TRANSPORT_WORKING = "transport_working";
+Transport.TRANSPORT_BROKEN = "transport_broken";
 
 Transport.paths = [
   [{x: 50, y: 50}, {x: 30, y: 0, scatterX: 10, scatterY: 50 }],
