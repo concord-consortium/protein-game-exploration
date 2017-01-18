@@ -8449,7 +8449,14 @@
 	          _this2.listener.melanosomeTransported(melanosome);
 	        }
 	      };
-	      this.moveAlongPath(melanosome, path, 0, callback);
+
+	      if (this.version == Transport.TRANSPORT_WORKING || Math.random() < 0.3) {
+	        this.moveAlongPath(melanosome, path, 0, callback);
+	      } else {
+	        setTimeout(function () {
+	          melanosome.animate({ r: 0 }, 2000);
+	        }, 8000);
+	      }
 	    }
 	  }]);
 
