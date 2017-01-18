@@ -54,7 +54,7 @@ let drakes = document.querySelectorAll("#drake img"),
     };
 
 var radios = document.getElementsByTagName("input");
-  for(let radio of radios) {
+  for(let radio of Array.from(radios)) {
     radio.onchange = function() {
       if (radio.checked) {
         if (radio.name == "melanogenesis") {
