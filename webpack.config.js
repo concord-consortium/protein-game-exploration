@@ -3,7 +3,8 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    'simple-animation': './simple-animation/js/app.js'
+    'simple-animation': './simple-animation/js/app.js',
+    'agent-model': './agent-model/src/app.js'
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -33,7 +34,8 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
       {from: path.join(__dirname, 'public')},
-      {from: path.join(__dirname, 'simple-animation', 'public'), to: 'simple-animation'}
+      {from: path.join(__dirname, 'simple-animation', 'public'), to: 'simple-animation'},
+      {from: path.join(__dirname, 'agent-model', 'public'), to: 'agent-model'}
     ])
   ]
 };
