@@ -3,6 +3,3 @@ npm-debug.log*
 .npm
 .node_repl_history
 .idea
-
-# OS or Editor folders
-.DS_Store

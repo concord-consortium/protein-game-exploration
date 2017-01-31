@@ -1,0 +1,50 @@
+name: melanosome
+image: melanosome.svg
+initialState: birth
+states:
+  - birth
+  - small
+  - full_grown
+  - moving_to_periphery
+rules:
+  - if:
+      state: birth
+    then:
+      - transform:
+          size: 2
+          over: 2s
+      - transform:
+          fill: "#f79708"
+          selection: ellipse
+          over: 2s
+          then:
+            transition: small
+  - if:
+      all:
+        - state: small
+        - fact: model.tyr1
+          equals: working
+    then:
+      - transform:
+          size: 9
+          over: 1s
+      - transform:
+          fill: "#505050"
+          over: 1s
+          then:
+            transition: full_grown
+  - if:
+      all:
+        - state: small
+        - fact: model.tyr1
+          equals: broken
+    then:
+      transition: full_grown
+  - if:
+      state: full_grown
+    then:
+      move:
+        nearest: microtubule.start
+        speed: 1
+        then:
+          transition: moving_to_periphery

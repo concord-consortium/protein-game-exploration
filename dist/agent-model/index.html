@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+#background {
+  position: absolute;
+  z-index: -1;
+}
+#app {
+  display: flex;
+}
+#game {
+  border: 1px solid #777;
+  border-radius: 10px;
+}
+#controls div {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+#drake {
+  position: relative;
+  margin-top: 60px;
+  border: 1px solid #888;
+  border-radius: 8px;
+  width: 200px;
+  height: 200px;
+}
+#drake img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+.hidden {
+  display: none;
+}
+        </style>
+    </head>
+    <body>
+      <div id="app">
+        <svg id="game" width="800px" height="600px"></svg>
+      </div>
+      <script type="text/javascript" src="agent-model.js" charset="utf-8"></script>
+    </body>
+</html>

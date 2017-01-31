@@ -1,0 +1,10 @@
+name: golgi
+selector: "#golgi ellipse"
+rules:
+  - if:
+      fact: model.produce_melanosomes
+    then:
+      generate:
+        agent: melanosome
+        where: in_area
+        every: 0.5s
