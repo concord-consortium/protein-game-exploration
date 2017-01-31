@@ -2,9 +2,11 @@ var Snap = require("snapsvg")
 import agentSpecies from './species'
 import Agent from './agent'
 
+const imgPath = "assets/"
+
 // Model
 const model = {
-  img: "assets/melanocyte.svg",
+  img: imgPath + "melanocyte.svg",
   props: {
     produce_melanosomes: true,
     tyr1: "working"
@@ -17,10 +19,10 @@ class World {
     this.props = model.props
     this.agents = []
 
-    const snap = Snap("#game")
+    this.snap = Snap("#game")
 
     Snap.load(model.img, (img) => {
-      snap.append(img)
+      this.snap.append(img)
       this.initializeWorld(img)
     })
   }
@@ -40,14 +42,28 @@ class World {
 
   initializeWorld(img) {
     this.loadExistingAgents(img)
-    console.log("Agents: ", this.agents)
+    console.log("Initial agents: ", this.agents)
 
-    this.step()
+    // quick demo showing two steps
+    setTimeout(() => this.step(), 1000);
+    setTimeout(() => this.step(), 2000);
   }
 
   createAgent(kind, x, y) {
     let species = agentSpecies[kind]
-    return new Agent(species, this, null, x, y)
+    if (species.image) {
+      Snap.load(imgPath + species.image, (f) => {
+        let element = f.select("g")
+        this.snap.append(element)
+
+        let matrix = new Snap.Matrix()
+        matrix.translate(x, y)
+        matrix.scale(0.1, 0.1)
+
+        element.transform(matrix)
+        this.agents.push(new Agent(species, this, element))
+      })
+    }
   }
 
   step() {

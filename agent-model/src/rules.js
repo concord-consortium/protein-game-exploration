@@ -20,14 +20,14 @@ function checkAntecedent(antecedent, agent, world) {
 
 function checkAntecedents(antecedents, agent, world) {
   if (antecedents.all) {
-    for (antecedent of antecedents.all) {
+    for (let antecedent of antecedents.all) {
       if (!checkAntecedent(antecedent, agent, world)) {
         return false
       }
       return true
     }
   } else if (antecedents.any) {
-    for (antecedent of antecedents.any) {
+    for (let antecedent of antecedents.any) {
       if (checkAntecedent(antecedent, agent, world)) {
         return true
       }
@@ -39,11 +39,11 @@ function checkAntecedents(antecedents, agent, world) {
 }
 
 export default function runRules (agent, world) {
-  const consequences = []
+  let consequences = []
   for (let rule of agent.species.rules) {
     if (checkAntecedents(rule.if, agent, world)) {
       if (Array.isArray(rule.then)) {
-        consequences.concat(rule.then)
+        consequences = consequences.concat(rule.then)
       } else {
         consequences.push(rule.then)
       }

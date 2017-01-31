@@ -1,6 +1,6 @@
 name: melanosome
 image: melanosome.svg
-state: birth
+initialState: birth
 states:
   - birth
   - small
@@ -11,10 +11,11 @@ rules:
       state: birth
     then:
       - transform:
-          size: 6
+          size: 2
           over: 2s
       - transform:
-          fill: #f79708
+          fill: "#f79708"
+          selection: ellipse
           over: 2s
           then:
             transition: small
@@ -28,7 +29,7 @@ rules:
           size: 9
           over: 1s
       - transform:
-          fill: #505050
+          fill: "#505050"
           over: 1s
           then:
             transition: full_grown
