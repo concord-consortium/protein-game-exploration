@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+#background {
+  position: absolute;
+  z-index: -1;
+}
+#app {
+  display: flex;
+}
+#game {
+  border: 1px solid #777;
+  border-radius: 10px;
+}
+#controls div {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+#drake {
+  position: relative;
+  margin-top: 60px;
+  border: 1px solid #888;
+  border-radius: 8px;
+  width: 200px;
+  height: 200px;
+}
+#drake img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+.hidden {
+  display: none;
+}
+        </style>
+    </head>
+    <body>
+      <div id="app">
+        <svg id="game" width="800px" height="600px"></svg>
+        <div id="controls">
+          <div>
+              <input type="radio" name="melanogenesis" id="WORKING_TYR1" />
+              <label for="WORKING_TYR1">Trp1 Working</label>
+              <br />
+              <input type="radio" name="melanogenesis" id="BROKEN_TYR1" checked="checked" />
+              <label for="BROKEN_TYR1">Trp1 Broken</label>
+          </div>
+          <div>
+              <input type="radio" name="transport" id="TRANSPORT_WORKING" checked="checked" />
+              <label for="TRANSPORT_WORKING">Myo5 Working</label>
+              <br />
+              <input type="radio" name="transport" id="TRANSPORT_BROKEN" />
+              <label for="TRANSPORT_BROKEN">Myo5 Broken</label>
+          </div>
+          <div>
+              <input type="radio" name="gate" id="GATE_WORKING" checked="checked" />
+              <label for="GATE_WORKING">Gate Proteins Working</label>
+              <br />
+              <input type="radio" name="gate" id="GATE_BROKEN" />
+              <label for="GATE_BROKEN">Gate Proteins Broken</label>
+          </div>
+          <div id="drake">
+            <img src="https://geniverse-resources.concord.org/resources/drakes/images/ch_m_wing_allLimb_a5_short_horn_noRostral_healthy.png" id="working_tyr1_transport_working_gate_working" style="opacity: 1"/>
+            <img src="https://geniverse-resources.concord.org/resources/drakes/images/st_m_wing_allLimb_a5_short_horn_noRostral_healthy.png" id="working_tyr1_transport_working_gate_broken" class="hidden"/>
+            <img src="https://geniverse-resources.concord.org/resources/drakes/images/du_m_wing_allLimb_a5_short_horn_noRostral_healthy.png" id="working_tyr1_transport_broken_gate_working" class="hidden"/>
+            <img src="https://geniverse-resources.concord.org/resources/drakes/images/ar_m_wing_allLimb_a5_short_horn_noRostral_healthy.png" id="working_tyr1_transport_broken_gate_broken" class="hidden"/>
+            <img src="https://geniverse-resources.concord.org/resources/drakes/images/ea_m_wing_allLimb_a5_short_horn_noRostral_healthy.png" id="broken_tyr1_transport_working_gate_working" class="hidden"/>
+            <img src="https://geniverse-resources.concord.org/resources/drakes/images/co_m_wing_allLimb_a5_short_horn_noRostral_healthy.png" id="broken_tyr1_transport_working_gate_broken" class="hidden"/>
+            <img src="https://geniverse-resources.concord.org/resources/drakes/images/sa_m_wing_allLimb_a5_short_horn_noRostral_healthy.png" id="broken_tyr1_transport_broken_gate_working" class="hidden"/>
+            <img src="https://geniverse-resources.concord.org/resources/drakes/images/go_m_wing_allLimb_a5_short_horn_noRostral_healthy.png" id="broken_tyr1_transport_broken_gate_broken" class="hidden"/>
+          </div>
+        </div>
+      </div>
+      <script type="text/javascript" src="simple-animation-fv.js" charset="utf-8"></script>
+    </body>
+</html>
