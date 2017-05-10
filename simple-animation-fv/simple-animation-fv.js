@@ -44,540 +44,185 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _melanogenesis = __webpack_require__(10);
 
-	var _species = __webpack_require__(1);
+	var _melanogenesis2 = _interopRequireDefault(_melanogenesis);
 
-	var _species2 = _interopRequireDefault(_species);
+	var _transport = __webpack_require__(11);
 
-	var _agent = __webpack_require__(4);
+	var _transport2 = _interopRequireDefault(_transport);
 
-	var _agent2 = _interopRequireDefault(_agent);
+	var _gate = __webpack_require__(12);
+
+	var _gate2 = _interopRequireDefault(_gate);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Snap = __webpack_require__(6);
 
 
-	var imgPath = "assets/";
+	(function () {
+	  Snap.plugin(function (Snap, Element, Paper, global) {
 
-	// Model
-	var model = {
-	  img: imgPath + "melanocyte.svg",
-	  props: {
-	    produce_melanosomes: true,
-	    tyr1: "working"
-	  }
-	};
+	    Element.prototype.drawAtPath = function (path, timer, options) {
 
-	var World = function () {
-	  function World(model) {
-	    var _this = this;
+	      var myObject = this,
+	          bbox = this.getBBox(1);
+	      var point,
+	          movePoint = {},
+	          len = path.getTotalLength(),
+	          from = 0,
+	          to = len,
+	          drawpath = 0,
+	          easing = mina.linear,
+	          callback;
+	      var startingTransform = '';
 
-	    _classCallCheck(this, World);
+	      if (options) {
+	        easing = options.easing || easing;
+	        if (options.reverse) {
+	          from = len;to = 0;
+	        };
+	        if (options.drawpath) {
+	          drawpath = 1;
+	          path.attr({
+	            fill: "none",
+	            strokeDasharray: len + " " + len,
+	            strokeDashoffset: this.len
+	          });
+	        };
+	        if (options.startingTransform) {
+	          startingTransform = options.startingTransform;
+	        };
+	        callback = options.callback || function () {};
+	      };
 
-	    this.model = model;
-	    this.props = model.props;
-	    this.agents = [];
+	      Snap.animate(from, to, function (val) {
+	        point = path.getPointAtLength(val);
+	        movePoint.x = point.x - bbox.cx;movePoint.y = point.y - bbox.cy;
+	        myObject.transform(startingTransform + 't' + movePoint.x + ',' + movePoint.y + 'r' + point.alpha);
 
-	    this.snap = Snap("#game");
+	        if (drawpath) {
+	          path.attr({ "stroke-dashoffset": len - val });
+	        };
+	      }, timer, easing, callback);
+	    };
+	  });
+	})();
 
-	    Snap.load(model.img, function (img) {
-	      _this.snap.append(img);
-	      _this.initializeWorld(img);
-	    });
-	  }
+	var snap = Snap("#game");
 
-	  _createClass(World, [{
-	    key: 'loadExistingAgents',
-	    value: function loadExistingAgents(img) {
-	      for (var kind in _species2.default) {
-	        var species = _species2.default[kind];
-	        if (species.selector) {
-	          var els = img.selectAll(species.selector);
-	          var _iteratorNormalCompletion = true;
-	          var _didIteratorError = false;
-	          var _iteratorError = undefined;
+	var melanogenesis = new _melanogenesis2.default(snap),
+	    transport = new _transport2.default(snap, melanogenesis),
+	    gate = new _gate2.default(snap, transport);
 
-	          try {
-	            for (var _iterator = els.items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	              var element = _step.value;
+	Snap.load("assets/melanocyte.svg", function (img) {
 
-	              var agent = new _agent2.default(species, this, element);
-	              this.agents.push(agent);
-	            }
-	          } catch (err) {
-	            _didIteratorError = true;
-	            _iteratorError = err;
-	          } finally {
-	            try {
-	              if (!_iteratorNormalCompletion && _iterator.return) {
-	                _iterator.return();
-	              }
-	            } finally {
-	              if (_didIteratorError) {
-	                throw _iteratorError;
-	              }
-	            }
-	          }
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'initializeWorld',
-	    value: function initializeWorld(img) {
-	      var _this2 = this;
-
-	      this.loadExistingAgents(img);
-	      console.log("Initial agents: ", this.agents);
-
-	      // quick demo showing two steps
-	      setTimeout(function () {
-	        return _this2.step();
-	      }, 1000);
-	      setTimeout(function () {
-	        return _this2.step();
-	      }, 2000);
-	    }
-	  }, {
-	    key: 'createAgent',
-	    value: function createAgent(kind, x, y) {
-	      var _this3 = this;
-
-	      var species = _species2.default[kind];
-	      if (species.image) {
-	        Snap.load(imgPath + species.image, function (f) {
-	          var element = f.select("g");
-	          _this3.snap.append(element);
-
-	          var matrix = new Snap.Matrix();
-	          matrix.translate(x, y);
-	          matrix.scale(0.1, 0.1);
-
-	          element.transform(matrix);
-	          _this3.agents.push(new _agent2.default(species, _this3, element));
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'step',
-	    value: function step() {
-	      var _iteratorNormalCompletion2 = true;
-	      var _didIteratorError2 = false;
-	      var _iteratorError2 = undefined;
-
-	      try {
-	        for (var _iterator2 = this.agents[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	          var agent = _step2.value;
-
-	          agent.step(this);
-	        }
-	      } catch (err) {
-	        _didIteratorError2 = true;
-	        _iteratorError2 = err;
-	      } finally {
-	        try {
-	          if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	            _iterator2.return();
-	          }
-	        } finally {
-	          if (_didIteratorError2) {
-	            throw _iteratorError2;
-	          }
-	        }
-	      }
-	    }
-	  }]);
-
-	  return World;
-	}();
-
-	var world = new World(model);
-
-/***/ },
-/* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var golgi = __webpack_require__(2),
-	    melanosome = __webpack_require__(3);
-
-	exports.default = {
-	  golgi: golgi,
-	  melanosome: melanosome
-	};
-
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"name": "golgi",
-		"selector": "#golgi ellipse",
-		"rules": [
-			{
-				"if": {
-					"fact": "model.produce_melanosomes"
-				},
-				"then": {
-					"generate": {
-						"agent": "melanosome",
-						"where": "in_area",
-						"every": "0.5s"
-					}
-				}
-			}
-		]
-	};
-
-/***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"name": "melanosome",
-		"image": "melanosome.svg",
-		"initialState": "birth",
-		"states": [
-			"birth",
-			"small",
-			"full_grown",
-			"moving_to_periphery"
-		],
-		"rules": [
-			{
-				"if": {
-					"state": "birth"
-				},
-				"then": [
-					{
-						"transform": {
-							"size": 2,
-							"over": "2s"
-						}
-					},
-					{
-						"transform": {
-							"fill": "#f79708",
-							"selection": "ellipse",
-							"over": "2s",
-							"then": {
-								"transition": "small"
-							}
-						}
-					}
-				]
-			},
-			{
-				"if": {
-					"all": [
-						{
-							"state": "small"
-						},
-						{
-							"fact": "model.tyr1",
-							"equals": "working"
-						}
-					]
-				},
-				"then": [
-					{
-						"transform": {
-							"size": 9,
-							"over": "1s"
-						}
-					},
-					{
-						"transform": {
-							"fill": "#505050",
-							"over": "1s",
-							"then": {
-								"transition": "full_grown"
-							}
-						}
-					}
-				]
-			},
-			{
-				"if": {
-					"all": [
-						{
-							"state": "small"
-						},
-						{
-							"fact": "model.tyr1",
-							"equals": "broken"
-						}
-					]
-				},
-				"then": {
-					"transition": "full_grown"
-				}
-			},
-			{
-				"if": {
-					"state": "full_grown"
-				},
-				"then": {
-					"move": {
-						"nearest": "microtubule.start",
-						"speed": 1,
-						"then": {
-							"transition": "moving_to_periphery"
-						}
-					}
-				}
-			}
-		]
-	};
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	  snap.append(img);
+	  snap.select("#melanosome").attr({
+	    visibility: "hidden"
+	  });
+	  melanogenesis.run();
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _rules = __webpack_require__(5);
-
-	var _rules2 = _interopRequireDefault(_rules);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Snap = __webpack_require__(6);
-
-	var Agent = function () {
-	  function Agent(species, world, element, x, y) {
-	    _classCallCheck(this, Agent);
-
-	    this.species = species;
-	    this.world = world;
-	    this.element = element;
-	    this.x = x;
-	    this.y = y;
-	    this.state = this.species.initialState;
-	  }
-
-	  _createClass(Agent, [{
-	    key: "step",
-	    value: function step() {
-	      var tasks = (0, _rules2.default)(this, this.world);
-
-	      // coming up... marking tasks as currently being done, for time-based tasks
-	      var _iteratorNormalCompletion = true;
-	      var _didIteratorError = false;
-	      var _iteratorError = undefined;
-
-	      try {
-	        for (var _iterator = tasks[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	          var task = _step.value;
-
-	          if (task.generate) {
-	            // refactor into list of verbs
-	            this.generate(task.generate);
-	          } else if (task.transform) {
-	            this.transform(task.transform);
-	          }
-	        }
-	      } catch (err) {
-	        _didIteratorError = true;
-	        _iteratorError = err;
-	      } finally {
-	        try {
-	          if (!_iteratorNormalCompletion && _iterator.return) {
-	            _iterator.return();
-	          }
-	        } finally {
-	          if (_didIteratorError) {
-	            throw _iteratorError;
-	          }
-	        }
-	      }
-	    }
-	  }, {
-	    key: "generate",
-	    value: function generate(opts) {
-	      var x = void 0,
-	          y = void 0;
-	      if (opts.where == "in_area") {
-	        var box = this.element.node.getBoundingClientRect();
-	        x = box.left + Math.random() * box.width;
-	        y = box.top + Math.random() * box.height - 10;
-	      }
-
-	      var agent = this.world.createAgent(opts.agent, x, y);
-	    }
-	  }, {
-	    key: "transform",
-	    value: function transform(opts) {
-	      // these shouldn't manipulate Snap directly, but should be
-	      // agent props that are read by the world's render method
-	      var element = opts.selection ? this.element.selectAll(opts.selection) : this.element;
-	      if (opts.size) {
-	        var matrix = element.transform().globalMatrix;
-	        matrix.scale(opts.size, opts.size);
-	        matrix.translate(-opts.size, -opts.size);
-	        element.animate({ transform: matrix }, 500); // we probably won't use Snap animations
-	      } else if (opts.fill) {
-	        element.animate({ fill: opts.fill }, 500);
-	      }
-	    }
-	  }]);
-
-	  return Agent;
-	}();
-
-	exports.default = Agent;
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = runRules;
-	function checkFact(antecedent, world) {
-	  // lazy hard-coding to world props for now, while we think about scoping
-	  var fact = antecedent.fact,
-	      property = fact.split(".")[1],
-	      val = world.props[property];
-	  if (antecedent.equals) {
-	    // can have more comparators
-	    return val == antecedent.equals;
+	var drakes = document.querySelectorAll("#drake img"),
+	    hide = function hide(els) {
+	  Array.prototype.forEach.call(els, function (el) {
+	    if (el.classList) el.classList.add("hidden");else el.className += " hidden";
+	  });
+	},
+	    show = function show(el) {
+	  if (el.classList) el.classList.remove("hidden");else el.className = el.className.replace(new RegExp('(^|\\b)' + "hidden".split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+	},
+	    fade = function fade(el, fadeIn, callback) {
+	  if (fadeIn) {
+	    el.style.opacity = 0;
 	  } else {
-	    return val;
+	    el.style.opacity = 1;
 	  }
-	}
 
-	function checkAntecedent(antecedent, agent, world) {
-	  if (antecedent.fact) {
-	    return checkFact(antecedent, world);
-	  } else if (antecedent.state) {
-	    return agent.state == antecedent.state;
-	  }
-	}
-
-	function checkAntecedents(antecedents, agent, world) {
-	  if (antecedents.all) {
-	    var _iteratorNormalCompletion = true;
-	    var _didIteratorError = false;
-	    var _iteratorError = undefined;
-
-	    try {
-	      for (var _iterator = antecedents.all[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	        var antecedent = _step.value;
-
-	        if (!checkAntecedent(antecedent, agent, world)) {
-	          return false;
-	        }
-	        return true;
-	      }
-	    } catch (err) {
-	      _didIteratorError = true;
-	      _iteratorError = err;
-	    } finally {
-	      try {
-	        if (!_iteratorNormalCompletion && _iterator.return) {
-	          _iterator.return();
-	        }
-	      } finally {
-	        if (_didIteratorError) {
-	          throw _iteratorError;
-	        }
-	      }
+	  var last = +new Date();
+	  var tick = function tick() {
+	    if (fadeIn) {
+	      el.style.opacity = +el.style.opacity + (new Date() - last) / 5000;
+	    } else {
+	      el.style.opacity = +el.style.opacity - (new Date() - last) / 5000;
 	    }
-	  } else if (antecedents.any) {
-	    var _iteratorNormalCompletion2 = true;
-	    var _didIteratorError2 = false;
-	    var _iteratorError2 = undefined;
+	    last = +new Date();
 
-	    try {
-	      for (var _iterator2 = antecedents.any[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	        var _antecedent = _step2.value;
-
-	        if (checkAntecedent(_antecedent, agent, world)) {
-	          return true;
-	        }
-	        return false;
-	      }
-	    } catch (err) {
-	      _didIteratorError2 = true;
-	      _iteratorError2 = err;
-	    } finally {
-	      try {
-	        if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	          _iterator2.return();
-	        }
-	      } finally {
-	        if (_didIteratorError2) {
-	          throw _iteratorError2;
-	        }
-	      }
+	    if (fadeIn && +el.style.opacity < 1 || !fadeIn && +el.style.opacity > 0) {
+	      window.requestAnimationFrame && requestAnimationFrame(tick) || setTimeout(tick, 16);
+	    } else if (callback) {
+	      callback();
 	    }
-	  } else {
-	    return checkAntecedent(antecedents, agent, world);
+	  };
+
+	  tick();
+	};
+
+	var radios = document.getElementsByTagName("input");
+	var _iteratorNormalCompletion = true;
+	var _didIteratorError = false;
+	var _iteratorError = undefined;
+
+	try {
+	  var _loop = function _loop() {
+	    var radio = _step.value;
+
+	    radio.onchange = function () {
+	      if (radio.checked) {
+	        if (radio.name == "melanogenesis") {
+	          melanogenesis.setVersion(_melanogenesis2.default[radio.id]);
+	        } else if (radio.name == "transport") {
+	          transport.setVersion(_transport2.default[radio.id]);
+	        } else if (radio.name == "gate") {
+	          gate.setVersion(_gate2.default[radio.id]);
+	        }
+
+	        setTimeout(function () {
+	          var visibleDrake = document.querySelectorAll("#drake img:not(.hidden)")[0];
+	          var drakeId = melanogenesis.version + "_" + transport.version + "_" + gate.version,
+	              drake = document.getElementById(drakeId);
+	          show(drake);
+	          fade(visibleDrake, false);
+	          fade(drake, true, function () {
+	            hide(drakes);show(drake);
+	          });
+	        }, 500);
+	      }
+	    };
+	  };
+
+	  for (var _iterator = Array.from(radios)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	    _loop();
 	  }
-	}
-
-	function runRules(agent, world) {
-	  var consequences = [];
-	  var _iteratorNormalCompletion3 = true;
-	  var _didIteratorError3 = false;
-	  var _iteratorError3 = undefined;
-
+	} catch (err) {
+	  _didIteratorError = true;
+	  _iteratorError = err;
+	} finally {
 	  try {
-	    for (var _iterator3 = agent.species.rules[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	      var rule = _step3.value;
-
-	      if (checkAntecedents(rule.if, agent, world)) {
-	        if (Array.isArray(rule.then)) {
-	          consequences = consequences.concat(rule.then);
-	        } else {
-	          consequences.push(rule.then);
-	        }
-	      }
+	    if (!_iteratorNormalCompletion && _iterator.return) {
+	      _iterator.return();
 	    }
-	  } catch (err) {
-	    _didIteratorError3 = true;
-	    _iteratorError3 = err;
 	  } finally {
-	    try {
-	      if (!_iteratorNormalCompletion3 && _iterator3.return) {
-	        _iterator3.return();
-	      }
-	    } finally {
-	      if (_didIteratorError3) {
-	        throw _iteratorError3;
-	      }
+	    if (_didIteratorError) {
+	      throw _iteratorError;
 	    }
 	  }
-
-	  return consequences;
 	}
 
 /***/ },
+/* 1 */,
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_LOCAL_MODULE_0__;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*** IMPORTS FROM imports-loader ***/
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_LOCAL_MODULE_0__;/*** IMPORTS FROM imports-loader ***/
 	(function() {
 	var fix = module.exports=0;
 
@@ -9212,6 +8857,328 @@
 	return Snap;
 	}));
 	}.call(window));
+
+/***/ },
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Melanogenesis = function () {
+	  function Melanogenesis(snap, version) {
+	    _classCallCheck(this, Melanogenesis);
+
+	    this.snap = snap;
+	    this.version = version || Melanogenesis.BROKEN_TYR1;
+	  }
+
+	  _createClass(Melanogenesis, [{
+	    key: "setVersion",
+	    value: function setVersion(version) {
+	      this.version = version;
+	    }
+	  }, {
+	    key: "setListener",
+	    value: function setListener(listener) {
+	      this.listener = listener;
+	    }
+	  }, {
+	    key: "stop",
+	    value: function stop() {
+	      this.isRunning = false;
+	    }
+	  }, {
+	    key: "run",
+	    value: function run() {
+	      var _this = this;
+
+	      this.isRunning = true;
+
+	      var loop = function loop() {
+	        if (!_this.isRunning) return;
+
+	        var nextStepInterval = 200 + Math.random() * 1000;
+	        setTimeout(loop, nextStepInterval);
+
+	        var masterMelanosome = _this.snap.select("#melanosome"),
+	            golgi = _this.snap.select("#golgi");
+
+	        var melanosome = masterMelanosome.clone();
+	        masterMelanosome.after(melanosome);
+
+	        var melanosomeBBox = melanosome.getBBox(),
+	            golgiBBox = golgi.getBBox(),
+	            x = golgiBBox.x + golgiBBox.width / 4,
+	            y = golgiBBox.y + golgiBBox.height / 4,
+	            randX = Math.random() * golgiBBox.width / 2,
+	            randY = Math.random() * golgiBBox.height / 2,
+	            moveTo = "t" + (x + randX - melanosomeBBox.cx) + "," + (y + randY - melanosomeBBox.cy);
+
+	        melanosome.attr({
+	          visibility: "",
+	          transform: moveTo + ",s0.1,0.1"
+	        });
+
+	        var callback = function callback() {
+	          if (_this.listener) _this.listener.melanosomeCreated(melanosome);
+	        };
+
+	        melanosome.animate({ transform: "s0.5,0.5" + moveTo }, 1500, function () {
+	          if (_this.version == Melanogenesis.WORKING_TYR1) {
+	            melanosome.select("path").attr({ fill: "url(#SVGID_6_medium)" });
+	            setTimeout(function () {
+	              return melanosome.select("path").attr({ fill: "url(#SVGID_6_dark)" });
+	            }, 1000);
+	            melanosome.animate({ transform: "s1,1," + moveTo }, 2000, callback);
+	          } else {
+	            callback();
+	          }
+	        });
+	      };
+
+	      loop();
+	    }
+	  }]);
+
+	  return Melanogenesis;
+	}();
+
+	exports.default = Melanogenesis;
+
+
+	Melanogenesis.WORKING_TYR1 = "working_tyr1";
+	Melanogenesis.BROKEN_TYR1 = "broken_tyr1";
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var speed = 0.1;
+
+	var Transport = function () {
+	  function Transport(snap, melanogenesis, version) {
+	    _classCallCheck(this, Transport);
+
+	    this.snap = snap;
+	    this.version = version || Transport.TRANSPORT_WORKING;
+	    melanogenesis.setListener(this);
+	  }
+
+	  _createClass(Transport, [{
+	    key: "setVersion",
+	    value: function setVersion(version) {
+	      this.version = version;
+	    }
+	  }, {
+	    key: "setListener",
+	    value: function setListener(listener) {
+	      this.listener = listener;
+	    }
+	  }, {
+	    key: "move",
+	    value: function move(obj, loc, callback) {
+	      var x = loc.x,
+	          y = loc.y;
+	      if (loc.scatterX && this.version == Transport.TRANSPORT_WORKING) {
+	        x += Math.random() * loc.scatterX * 2 - loc.scatterX;
+	        y += Math.random() * loc.scatterY * 2 - loc.scatterY;
+	      }
+
+	      var t = obj.transform().total,
+	          translate = t ? t.match(/t([^,]*),([0-9.-]*)/) : [],
+	          scaleRegex = t ? t.match(/s([^,]*),([0-9.-]*)/) : [],
+	          scale = scaleRegex ? parseFloat(scaleRegex[1]) : 1,
+	          scaleStr = scaleRegex ? scaleRegex[0] : "s1,1";
+
+	      var orig_x = parseFloat(translate[1]) || 0,
+	          orig_y = parseFloat(translate[2]) || 0,
+	          objBBox = obj.getBBox(),
+	          dx = x - objBBox.cx,
+	          dy = y - objBBox.cy,
+	          invScale = 1 / scale,
+	          xTrans = (orig_x + dx) * invScale,
+	          yTrans = (orig_y + dy) * invScale,
+	          dist = Math.sqrt(dx * dx + dy * dy),
+	          time = dist / speed;
+
+	      var matrix = new Snap.Matrix();
+	      matrix.scale(scale, scale);
+	      matrix.translate(xTrans, yTrans);
+
+	      obj.animate({ transform: matrix }, time, callback);
+	    }
+	  }, {
+	    key: "moveAlongPath",
+	    value: function moveAlongPath(obj, path, waypoint, callback) {
+	      var _this = this;
+
+	      if (path[waypoint]) {
+	        this.move(obj, path[waypoint], function () {
+	          _this.moveAlongPath(obj, path, ++waypoint, callback);
+	        });
+	      } else {
+	        callback();
+	      }
+	    }
+	  }, {
+	    key: "melanosomeCreated",
+	    value: function melanosomeCreated(melanosome) {
+	      var _this2 = this;
+
+	      var top = melanosome.node.getBoundingClientRect().top - 3;
+	      var path = Transport.paths[Math.floor(Math.random() * 4)];
+
+	      var callback = function callback() {
+	        if (_this2.listener) {
+	          // this.listener.melanosomeTransported(melanosome);
+	        }
+	      };
+
+	      if (this.version == Transport.TRANSPORT_WORKING || Math.random() < 0.3) {
+	        this.moveAlongPath(melanosome, path, 0, callback);
+	      } else {
+	        setTimeout(function () {
+	          var t = melanosome.transform().total,
+	              translate = t ? t.match(/t([^,]*),([0-9.-]*)/) : [];
+	          melanosome.animate({ transform: "s0.1,0.1" + translate[0] }, 2000, function () {
+	            return melanosome.animate({ transform: "s0,0" }, 10, callback);
+	          });
+	        }, 2000);
+	      }
+	    }
+	  }]);
+
+	  return Transport;
+	}();
+
+	exports.default = Transport;
+
+
+	Transport.TRANSPORT_WORKING = "transport_working";
+	Transport.TRANSPORT_BROKEN = "transport_broken";
+
+	Transport.paths = [[{ x: 460, y: 660 }, { x: 470, y: 690 }, { x: 455, y: 715 }, { x: 400, y: 715 }, { x: 380, y: 705 }, { x: 310, y: 640 }, { x: 150, y: 635 }, { x: 60, y: 625 }], [{ x: 440, y: 540 }, { x: 360, y: 510 }, { x: 330, y: 490 }, { x: 300, y: 430 }, { x: 300, y: 430 }, { x: 270, y: 410 }], [{ x: 480, y: 490 }, { x: 380, y: 420 }, { x: 360, y: 385 }, { x: 365, y: 325 }], [{ x: 560, y: 490, scatterx: 7, scatterY: 7 }, { x: 520, y: 435 }, { x: 515, y: 405 }, { x: 525, y: 325 }, { x: 495, y: 270 }, { x: 495, y: 215 }, { x: 455, y: 170 }, { x: 425, y: 100, scatterx: 7, scatterY: 7 }]];
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Gate = function () {
+	  function Gate(snap, transport, version) {
+	    _classCallCheck(this, Gate);
+
+	    this.snap = snap;
+	    transport.setListener(this);
+
+	    var s = snap;
+	    this.gateCells = s.group(s.circle(615, 166, 0), s.circle(625, 190, 0), s.circle(585, 440, 0), s.circle(575, 460, 0));
+	    this.gateCells.attr({
+	      fill: "#f7f738",
+	      stroke: "#000",
+	      strokeWidth: 1
+	    });
+
+	    this.setVersion(version || Gate.GATE_WORKING);
+	  }
+
+	  _createClass(Gate, [{
+	    key: "setVersion",
+	    value: function setVersion(version) {
+	      this.version = version;
+	      if (version == Gate.GATE_WORKING) {
+	        this.gateCells.selectAll('circle').animate({
+	          r: 6
+	        }, 500);
+	      } else {
+	        this.gateCells.selectAll('circle').animate({
+	          r: 0
+	        }, 500);
+	      }
+	    }
+	  }, {
+	    key: "move",
+	    value: function move(obj, loc, callback) {
+	      var x = loc.x,
+	          y = loc.y;
+	      if (loc.scatterX) {
+	        x += Math.random() * loc.scatterX * 2 - loc.scatterX;
+	        y += Math.random() * loc.scatterY * 2 - loc.scatterY;
+	      }
+	      obj.animate({ cx: x }, 2200, mina.easeout);
+	      obj.animate({ cy: y }, 2200, mina.easeout, callback);
+	    }
+	  }, {
+	    key: "moveAlongPath",
+	    value: function moveAlongPath(obj, path, waypoint) {
+	      var _this = this;
+
+	      if (path[waypoint] && (waypoint == 0 || this.version == Gate.GATE_WORKING)) {
+	        this.move(obj, path[waypoint], function () {
+	          _this.moveAlongPath(obj, path, ++waypoint);
+	        });
+	      }
+	    }
+	  }, {
+	    key: "melanosomeTransported",
+	    value: function melanosomeTransported(melanosome) {
+	      var top = melanosome.node.getBoundingClientRect().top - 3,
+	          left = melanosome.node.getBoundingClientRect().left;
+	      var fadeTime = void 0;
+	      if (top > 250 && top < 340 && left > 350 && left < 410) {
+	        var path = Gate.paths[Math.floor(Math.random() * 2)];
+	        this.moveAlongPath(melanosome, path, 0);
+	        fadeTime = 11000 + Math.random() * 3000;
+	      } else {
+	        fadeTime = 5000 + Math.random() * 3000;
+	      }
+
+	      setTimeout(function () {
+	        melanosome.animate({ r: 0 }, 2000);
+	      }, fadeTime);
+	    }
+	  }]);
+
+	  return Gate;
+	}();
+
+	exports.default = Gate;
+
+
+	Gate.GATE_WORKING = "gate_working";
+	Gate.GATE_BROKEN = "gate_broken";
+
+	Gate.paths = [[{ x: 610, y: 185 }, { x: 680, y: 140, scatterX: 40, scatterY: 50 }], [{ x: 570, y: 450 }, { x: 630, y: 500, scatterX: 40, scatterY: 50 }]];
 
 /***/ }
 /******/ ]);
