@@ -5,7 +5,8 @@ module.exports = {
   entry: {
     'simple-animation': './simple-animation/js/app.js',
     'simple-animation-fv': './simple-animation-fv/js/app.js',
-    'agent-model': './agent-model/src/app.js'
+    'agent-model': './agent-model/src/app.js',
+    'agent-exploration': './agent-exploration/js/app.js'
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -37,7 +38,8 @@ module.exports = {
       {from: path.join(__dirname, 'public')},
       {from: path.join(__dirname, 'simple-animation', 'public'), to: 'simple-animation'},
       {from: path.join(__dirname, 'simple-animation-fv', 'public'), to: 'simple-animation-fv'},
-      {from: path.join(__dirname, 'agent-model', 'public'), to: 'agent-model'}
+      {from: path.join(__dirname, 'agent-model', 'public'), to: 'agent-model'},
+      {from: path.join(__dirname, 'agent-exploration', 'public'), to: 'agent-exploration'}
     ])
   ]
 };
