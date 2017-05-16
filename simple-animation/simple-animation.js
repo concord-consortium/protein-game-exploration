@@ -46,21 +46,21 @@
 
 	"use strict";
 
-	var _melanogenesis = __webpack_require__(7);
+	var _melanogenesis = __webpack_require__(10);
 
 	var _melanogenesis2 = _interopRequireDefault(_melanogenesis);
 
-	var _transport = __webpack_require__(8);
+	var _transport = __webpack_require__(11);
 
 	var _transport2 = _interopRequireDefault(_transport);
 
-	var _gate = __webpack_require__(9);
+	var _gate = __webpack_require__(12);
 
 	var _gate2 = _interopRequireDefault(_gate);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Snap = __webpack_require__(6);
+	var Snap = __webpack_require__(4);
 
 
 	var snap = Snap("#game");
@@ -161,12 +161,10 @@
 /* 1 */,
 /* 2 */,
 /* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_LOCAL_MODULE_0__;/*** IMPORTS FROM imports-loader ***/
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_LOCAL_MODULE_0__;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*** IMPORTS FROM imports-loader ***/
 	(function() {
 	var fix = module.exports=0;
 
@@ -8803,7 +8801,12 @@
 	}.call(window));
 
 /***/ },
-/* 7 */
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8889,7 +8892,7 @@
 	Melanogenesis.BROKEN_TYR1 = "broken_tyr1";
 
 /***/ },
-/* 8 */
+/* 11 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8982,7 +8985,7 @@
 	Transport.paths = [[{ x: 50, y: 50 }, { x: 30, y: 0, scatterX: 10, scatterY: 50 }], [{ x: 260, y: 270 }, { x: 320, y: 300 }, { x: 360, y: 300, scatterX: 50, scatterY: 140 }], [{ x: 70, y: 450 }, { x: 50, y: 600, scatterX: 10, scatterY: 50 }]];
 
 /***/ },
-/* 9 */
+/* 12 */
 /***/ function(module, exports) {
 
 	"use strict";

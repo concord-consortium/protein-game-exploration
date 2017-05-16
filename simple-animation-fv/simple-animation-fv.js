@@ -46,21 +46,21 @@
 
 	"use strict";
 
-	var _melanogenesis = __webpack_require__(10);
+	var _melanogenesis = __webpack_require__(13);
 
 	var _melanogenesis2 = _interopRequireDefault(_melanogenesis);
 
-	var _transport = __webpack_require__(11);
+	var _transport = __webpack_require__(14);
 
 	var _transport2 = _interopRequireDefault(_transport);
 
-	var _gate = __webpack_require__(12);
+	var _gate = __webpack_require__(15);
 
 	var _gate2 = _interopRequireDefault(_gate);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Snap = __webpack_require__(6);
+	var Snap = __webpack_require__(4);
 
 
 	(function () {
@@ -217,12 +217,10 @@
 /* 1 */,
 /* 2 */,
 /* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_LOCAL_MODULE_0__;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*** IMPORTS FROM imports-loader ***/
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_LOCAL_MODULE_0__;/*** IMPORTS FROM imports-loader ***/
 	(function() {
 	var fix = module.exports=0;
 
@@ -8859,10 +8857,15 @@
 	}.call(window));
 
 /***/ },
+/* 5 */,
+/* 6 */,
 /* 7 */,
 /* 8 */,
 /* 9 */,
-/* 10 */
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8961,7 +8964,7 @@
 	Melanogenesis.BROKEN_TYR1 = "broken_tyr1";
 
 /***/ },
-/* 11 */
+/* 14 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9081,7 +9084,7 @@
 	Transport.paths = [[{ x: 460, y: 660 }, { x: 470, y: 690 }, { x: 455, y: 715 }, { x: 400, y: 715 }, { x: 380, y: 705 }, { x: 310, y: 640 }, { x: 150, y: 635 }, { x: 60, y: 625 }], [{ x: 440, y: 540 }, { x: 360, y: 510 }, { x: 330, y: 490 }, { x: 300, y: 430 }, { x: 300, y: 430 }, { x: 270, y: 410 }], [{ x: 480, y: 490 }, { x: 380, y: 420 }, { x: 360, y: 385 }, { x: 365, y: 325 }], [{ x: 560, y: 490, scatterx: 7, scatterY: 7 }, { x: 520, y: 435 }, { x: 515, y: 405 }, { x: 525, y: 325 }, { x: 495, y: 270 }, { x: 495, y: 215 }, { x: 455, y: 170 }, { x: 425, y: 100, scatterx: 7, scatterY: 7 }]];
 
 /***/ },
-/* 12 */
+/* 15 */
 /***/ function(module, exports) {
 
 	"use strict";
