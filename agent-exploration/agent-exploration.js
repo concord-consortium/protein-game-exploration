@@ -60,6 +60,7 @@
 
 
 	var snap = Snap("#model");
+	var fps = 60;
 
 	Snap.plugin(function (Snap, Element, Paper, global) {
 	  Element.prototype.nativeAttrs = function (attrs) {
@@ -83,7 +84,7 @@
 	      world: img,
 	      x: spawnPoint.x,
 	      y: spawnPoint.y,
-	      speed: 0.7,
+	      speed: 0.8,
 	      direction: Math.random() * 2,
 	      r: 0,
 	      vr: 3
@@ -95,19 +96,23 @@
 	    agents.push(melanosome);
 	  };
 
+	  var lastCreateTime = window.performance.now();
 	  var lastTime = window.performance.now();
 
 	  var redraw = function redraw() {
 	    requestAnimationFrame(redraw);
 
 	    var now = window.performance.now();
-	    if (now - lastTime > 500) {
+	    var frameSize = (now - lastTime) / (1000 / fps);
+	    lastTime = now;
+
+	    if (now - lastCreateTime > 600) {
 	      createNewMelanosome();
-	      lastTime = now;
+	      lastCreateTime = now;
 	    }
 
 	    for (var i in agents) {
-	      agents[i].step();
+	      agents[i].step(frameSize);
 	      agents[i].view.render();
 	    }
 
@@ -173,7 +178,7 @@
 
 	  _createClass(Agent, [{
 	    key: "step",
-	    value: function step() {
+	    value: function step(frameSize) {
 	      var speed = 0;
 
 	      if (this.state == "growing") {
@@ -193,10 +198,11 @@
 	      if (this.state == "finding start") {
 	        var dx = this.destination.x - this.x,
 	            dy = this.destination.y - this.y,
-	            distSq = dx * dx + dy * dy;
+	            distSq = dx * dx + dy * dy,
+	            speedSq = this.speedSq * (frameSize * frameSize);
 
 	        this.direction = Math.atan2(dy, dx);
-	        speed = distSq > this.speedSq ? this.speed : Math.sqrt(distSq);
+	        speed = distSq > speedSq ? this.speed * frameSize : Math.sqrt(distSq);
 
 	        if (speed == 0) {
 	          this.state = "following";
@@ -208,12 +214,46 @@
 	        this.y += vy;
 	      }
 	      if (this.state == "following") {
-	        this.destination = this.path.node.getPointAtLength(this.distanceAlongLength + this.speed);
+	        this.destination = this.path.node.getPointAtLength(this.distanceAlongLength + this.speed * frameSize);
 	        this.x = this.destination.x;
 	        this.y = this.destination.y;
-	        this.distanceAlongLength += this.speed;
+	        this.distanceAlongLength += this.speed * frameSize;
 
 	        if (this.distanceAlongLength > this.path.node.getTotalLength()) {
+	          var gates = this.tempSnap.selectAll("#gate_x5F_openA, #gate_x5F_openB");
+	          for (var i = 0; i < gates.length; i++) {
+	            var gateBB = gates[i].getBBox();
+	            if (Math.abs(gateBB.cx - this.x) < 100 && Math.abs(gateBB.cy - this.y) < 100) {
+	              this.gate = gates[i];
+	              this.state = "exiting";
+	            }
+	            if (this.state !== "exiting") {
+	              this.state = "dying";
+	            }
+	          }
+	        }
+	      }
+	      if (this.state == "exiting") {
+	        if (this.size > 0.6) {
+	          this.size -= 0.04;
+	        }
+	        if (!this.exit) {
+	          this.exit = this.gate.select(".exit").getBBox();
+	          this.vx = (this.exit.cx - this.x) / 16;
+	          this.vy = (this.exit.cy - this.y) / 16;
+	        }
+	        if (this.y < this.exit.y + this.exit.h) {
+	          this.size += 0.05;
+	        }
+	        this.x += this.vx;
+	        this.y += this.vy;
+	        if (this.y < 0) {
+	          this.dead = true;
+	        }
+	      }
+	      if (this.state == "dying") {
+	        this.size -= 0.01;
+	        if (this.size <= 0.01) {
 	          this.dead = true;
 	        }
 	      }
