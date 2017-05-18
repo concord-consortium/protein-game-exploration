@@ -3,6 +3,7 @@ import Agent from "./agent";
 import Feature from "./feature";
 
 const snap = Snap("#model")
+const fps = 60
 
 Snap.plugin( function( Snap, Element, Paper, global ) {
     Element.prototype.nativeAttrs = function( attrs ) {
@@ -26,7 +27,7 @@ Snap.load("assets/melanocyte.svg", (img) => {
       world: img,
       x: spawnPoint.x,
       y: spawnPoint.y,
-      speed: 0.7,
+      speed: 0.8,
       direction: Math.random() * 2,
       r: 0,
       vr: 3
@@ -39,19 +40,23 @@ Snap.load("assets/melanocyte.svg", (img) => {
     agents.push(melanosome)
   }
 
+  let lastCreateTime = window.performance.now()
   let lastTime = window.performance.now()
 
   const redraw = () => {
     requestAnimationFrame( redraw )
 
     let now = window.performance.now()
-    if (now - lastTime > 500) {
+    let frameSize = (now - lastTime) / (1000 / fps)
+    lastTime = now
+
+    if (now - lastCreateTime > 600) {
       createNewMelanosome()
-      lastTime = now
+      lastCreateTime = now
     }
 
     for (let i in agents) {
-      agents[i].step()
+      agents[i].step(frameSize)
       agents[i].view.render()
     }
 

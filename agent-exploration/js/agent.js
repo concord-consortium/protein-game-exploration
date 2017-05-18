@@ -14,7 +14,7 @@ export default class Agent {
     this.state = "growing"
   }
 
-  step() {
+  step(frameSize) {
     let speed = 0
 
     if (this.state == "growing") {
@@ -34,10 +34,11 @@ export default class Agent {
     if (this.state == "finding start") {
       let dx = this.destination.x - this.x,
           dy = this.destination.y - this.y,
-          distSq = (dx * dx) + (dy * dy);
+          distSq = (dx * dx) + (dy * dy),
+          speedSq = this.speedSq * (frameSize * frameSize)
 
       this.direction = Math.atan2(dy, dx)
-      speed = (distSq > this.speedSq) ? this.speed : Math.sqrt(distSq)
+      speed = (distSq > speedSq) ? (this.speed * frameSize) : Math.sqrt(distSq)
 
       if (speed == 0) {
         this.state = "following"
@@ -49,12 +50,46 @@ export default class Agent {
       this.y += vy
     }
     if (this.state == "following") {
-      this.destination = this.path.node.getPointAtLength(this.distanceAlongLength + this.speed);
+      this.destination = this.path.node.getPointAtLength(this.distanceAlongLength + (this.speed * frameSize));
       this.x = this.destination.x
       this.y = this.destination.y
-      this.distanceAlongLength += this.speed
+      this.distanceAlongLength += (this.speed * frameSize)
 
       if (this.distanceAlongLength > this.path.node.getTotalLength()) {
+        let gates = this.tempSnap.selectAll("#gate_x5F_openA, #gate_x5F_openB")
+        for (let i = 0; i < gates.length; i++) {
+          let gateBB = gates[i].getBBox()
+          if (Math.abs(gateBB.cx - this.x) < 100 && Math.abs(gateBB.cy - this.y) < 100) {
+            this.gate = gates[i]
+            this.state = "exiting"
+          }
+          if (this.state !== "exiting") {
+            this.state = "dying"
+          }
+        }
+      }
+    }
+    if (this.state == "exiting") {
+      if (this.size > 0.6) {
+        this.size -= 0.04
+      }
+      if (!this.exit) {
+        this.exit = this.gate.select(".exit").getBBox()
+        this.vx = (this.exit.cx - this.x) / 16
+        this.vy = (this.exit.cy - this.y) / 16
+      }
+      if (this.y < this.exit.y + this.exit.h) {
+        this.size += 0.05
+      }
+      this.x += this.vx
+      this.y += this.vy
+      if (this.y < 0) {
+        this.dead = true;
+      }
+    }
+    if (this.state == "dying") {
+      this.size -= 0.01
+      if (this.size <= 0.01) {
         this.dead = true;
       }
     }
